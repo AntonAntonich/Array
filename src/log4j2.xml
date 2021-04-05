@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration status = "info">
+   <Properties>
+       <property name="LOG_DIR">logs</property>
+       <property name="ARCHIVE_LOG_DIR">${LOG_DIR}/archive</property>
+       <property name="pattern_console">%d{yyyy} [%t]%5level %c{.} - %msg%n</property>
+       <property name="pattern_file">%d{yyyy-mm-dd}[%t]%-5level %c{6} - msg%n</property>
+
+   </Properties>
+<!--    <TreshholdFilter level="trace>"/>-->
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${pattern_console}"></PatternLayout>
+        </Console>
+
+        <File name="File1" fileName = "logs/text.log" bufferedIO = "true">
+            <PatternLayout pattern= "${pattern_file}"></PatternLayout>
+        </File>
+
+        <RollingFile name="Rolling_file" filename="logs/text_roll.log" append="true"
+                     filePattern="logs/${date:yyyy-MM-dd}/%d{yyyy-MM-dd_HH-mm}_%i.log">
+            <PatternLayout pattern= "${pattern_file}"></PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="1 KB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="3"/>
+        </RollingFile>
+
+        <RollingFile name="File_zip" filename="${LOG_DIR/text_arch.log" append="true"
+                     filePattern="${ARCHIVE_LOG_DIR}/${date:yyyy-MM-dd}/%d{yyyy-MM-dd_HH-mm}_%i.log.zip">
+            <Policies>
+                <SizeBasedTriggeringPolicy size="1 KB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="3"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="Log_Console" level="debug" additivity="false">
+            <Appender-ref ref="Console"/>
+        </Logger>
+
+        <Logger name="Log_File" level="trace" additivity="false">
+            <Appender-ref ref="File1"/>
+        </Logger>
+
+        <Logger name="Log_Rolling_File" level="trace" additivity="false">
+            <Appender-ref ref="Rolling_file"/>
+        </Logger>
+
+        <Logger name="Log_Rolling_Fle_Zip" level="trace" additivity="false">
+            <Appender-ref ref="File_zip"/>
+        </Logger>
+
+        <Root level="debug">
+            <Appender-ref ref="Rolling_file" level="trace"/>
+<!--            <Appender-ref ref="Console" level="trace"/>-->
+<!--            <Appender-ref ref="File1" level="trace"/>-->
+<!--            <Appender-ref ref="File_zip" level="trace"/>-->
+        </Root>
+    </Loggers>
+</Configuration>
